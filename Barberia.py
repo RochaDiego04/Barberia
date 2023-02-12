@@ -1,6 +1,7 @@
 from random import randint
 import queue
 
+
 # for:
 # Agregar clientes que serán numeros random de tiempo
 # Agregar barberos que serán una lista de queues
@@ -47,10 +48,11 @@ class Barberia:
                 print(f"Agregado a la cola del barbero {cola_barbero}")
             else:
                 print(f"barbero {i} lleno")
+
+
 '''        for elemento in self.lista_barberos:
             print(elemento.queue)
         print(self.cola_clientes)'''
-
 
 # MAIN
 barberia_puñeta = Barberia(2, 7)
