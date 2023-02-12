@@ -1,6 +1,13 @@
 from random import randint
 import queue
 
+# for:
+# Agregar clientes que serán numeros random de tiempo
+# Agregar barberos que serán una lista de queues
+# Asignar estos valores a la clase
+# Metodo para verificar si los barberos están vacios y si es asi, asignarles clientes
+# Cuando se asignen los clientes a las queues ir disminuyendo de 1 en 1 sus tiempos
+# Cuando el tiempo de un cliente llegue a 0, borrar al cliente con get()
 
 class Barberia:
 
@@ -37,13 +44,16 @@ class Barberia:
             if cola_barbero.empty():
                 cliente = self.cola_clientes.get()  # Sacamos al cliente de la cola de clientes
                 cola_barbero.put(cliente)  # Agregamos al cliente a la cola de un barbero
+                print(f"Agregado a la cola del barbero {cola_barbero}")
             else:
                 print(f"barbero {i} lleno")
-        print(self.lista_barberos)
-        print(self.cola_clientes)
+'''        for elemento in self.lista_barberos:
+            print(elemento.queue)
+        print(self.cola_clientes)'''
 
 
-barberia_puñeta = Barberia(5, 3)
+# MAIN
+barberia_puñeta = Barberia(2, 7)
 barberia_puñeta.crear_clientes()
 barberia_puñeta.crear_barberos()
 barberia_puñeta.asignar_cliente_a_barbero()
