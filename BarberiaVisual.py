@@ -1,84 +1,78 @@
 import pygame
 import time
 
-# Configuración inicial
-SCREEN_WIDTH = 640
-SCREEN_HEIGHT = 480
-FPS = 60
 
 # Inicializar Pygame
 pygame.init()
-pygame.display.set_caption("Barbería de Diego Rocha")
+
+# Configurar la ventana
+SCREEN_WIDTH = 640
+SCREEN_HEIGHT = 480
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-# Cargar imágenes
-IMG_BARBERO = pygame.image.load("BarberoImg.png")
-IMG_PERSONA = pygame.image.load("PersonaImg.png")
+# Titulo e icono
+pygame.display.set_caption("Barbería de Diego Rocha")
 
-# Inicializar variables
-barbero_pos = (50, 30)
-persona_pos = (290, 420)
+# Cargar la imagen de píxeles y posicion inicial
+img_barbero = pygame.image.load("BarberoImg.png")
+barbero_x = 50
+barbero_y = 30
+
+img_persona = pygame.image.load("PersonaImg.png")
+persona_x = 290
+persona_y = 420
+
+# Inicializar la variable del tiempo
 tiempo_inicio = None
 
 
-# Funciones
-def imprimir_texto(texto, fuente, color, x, y):
-    render = fuente.render(texto, True, color)
-    screen.blit(render, (x, y))
+def barbero():
+    screen.blit(img_barbero, (barbero_x, barbero_y))
 
 
-def imprimir_imagen(imagen, pos):
-    screen.blit(imagen, pos)
+def persona(x, y):
+    screen.blit(img_persona, (x, y))
 
 
-def manejar_eventos():
-    global persona_pos, tiempo_inicio
-
-    for evento in pygame.event.get():
-        if evento.type == pygame.QUIT:
-            return False
-
-        if evento.type == pygame.KEYDOWN:
-            if evento.key == pygame.K_SPACE:
-                persona_pos = barbero_pos
-                tiempo_inicio = time.time()
-            elif evento.key == pygame.K_b:
-                print("Agregar barbero")
-            elif evento.key == pygame.K_p:
-                print("Agregar persona")
-
-    return True
-
-
-def dibujar_pantalla():
-    # Fondo
+# Loop del juego
+se_ejecuta = True
+while se_ejecuta:
+    # RGB de la pantalla
     screen.fill((255, 255, 255))
 
-    # Personajes
-    imprimir_imagen(IMG_BARBERO, barbero_pos)
-    imprimir_imagen(IMG_PERSONA, persona_pos)
+    for evento in pygame.event.get():
+        # Evento para cerrar la ventana
+        if evento.type == pygame.QUIT:
+            se_ejecuta = False
 
-    # Tiempo
+        # Evento para moverse a la ubicacion del barbero
+        if evento.type == pygame.KEYDOWN and evento.key == pygame.K_SPACE:
+            persona_x = barbero_x
+            persona_y = barbero_y
+            tiempo_inicio = time.time()
+
+    # LLamar a personajes
+    barbero()
+    persona(persona_x, persona_y)
+
+    # Mostrar el tiempo transcurrido en la pantalla
     if tiempo_inicio:
         tiempo_transcurrido = int(time.time() - tiempo_inicio)
-        imprimir_texto(f"Tiempo transcurrido: {tiempo_transcurrido} segundos", pygame.font.Font(None, 20), (0, 0, 0),
-                       SCREEN_WIDTH - 220, 10)
+        tiempo_texto = f"Tiempo transcurrido: {tiempo_transcurrido} segundos"
+        tiempo_fuente = pygame.font.Font(None, 20)
+        tiempo_render = tiempo_fuente.render(tiempo_texto, True, (0, 0, 0))
+        screen.blit(tiempo_render, (SCREEN_WIDTH - 220, 10))
 
-    # Instrucciones
-    imprimir_texto("Tecla [b] para añadir barberos", pygame.font.Font(None, 20), (0, 0, 0), 30, 400)
-    imprimir_texto("Tecla [p] para añadir personas", pygame.font.Font(None, 20), (0, 0, 0), 30, 420)
+    # Imprimir labels de instrucciones
+    instrucciones_barbero_texto = "Tecla [b] para añadir barberos"
+    instrucciones_persona_texto = "Tecla [p] para añadir personas"
+    instrucciones_fuente = pygame.font.Font(None, 20)
+    instrucciones_barbero_render = instrucciones_fuente.render(instrucciones_barbero_texto, True, (0, 0, 0))
+    instrucciones_persona_render = instrucciones_fuente.render(instrucciones_persona_texto, True, (0, 0, 0))
+    screen.blit(instrucciones_barbero_render, (30, 400))
+    screen.blit(instrucciones_persona_render, (30, 420))
 
-    # Actualizar pantalla
     pygame.display.update()
 
-    return True
-
-
-# Bucle principal
-jugando = True
-reloj = pygame.time.Clock()
-
-while jugando:
-    jugando = manejar_eventos()
-    dibujar_pantalla()
-    reloj.tick
+# Salir de Pygame
+pygame.quit()
