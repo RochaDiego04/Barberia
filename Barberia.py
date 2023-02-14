@@ -1,6 +1,7 @@
 from random import randint
 import queue
 import pygame
+import time
 
 
 # for:
@@ -22,7 +23,7 @@ class Clase_Barberia:
 
     def crear_clientes(self):
         cola_clientes = queue.Queue()
-        tiempo_aleatorio = randint(5, 10)
+        tiempo_aleatorio = randint(50, 100)
         cola_clientes.put(tiempo_aleatorio)
         self.cola_clientes = cola_clientes  # Agregamos un cliente a la cola
         self.cantidad_clientes += 1  # Agregamos un cliente cada que se llame a esta funcion
@@ -42,9 +43,11 @@ class Clase_Barberia:
             if cola_barbero.empty():
                 cliente = self.cola_clientes.get()  # Sacamos al cliente de la cola de clientes
                 cola_barbero.put(cliente)  # Agregamos al cliente a la cola de un barbero
-                print(f"Agregado a la cola del barbero {cola_barbero}")
+                print(f"{cliente}Agregado a la cola del barbero {cola_barbero}")
+                return cola_barbero
             else:
                 print(f"barbero {i} lleno")
+        return queue.Queue() #En caso de que todas las colas esten llenas, retornamos una vacia
 
     def verificar_fila_vacia(self):
         if self.cola_clientes.empty():
@@ -53,6 +56,26 @@ class Clase_Barberia:
         else:
             return False  # Si la fila esta vacia retorna true
 
+    def disminuir_contadores(self, cola_barbero):
+        if cola_barbero.empty():
+            pass
+        else:
+            # Inicializar el temporizador con el elemento en la cola del barbero
+            tiempo_restante = cola_barbero.queue[0]
+
+            # Bucle para el temporizador
+            while tiempo_restante > 0:
+                print(f"Tiempo restante: {tiempo_restante}")
+                tiempo_restante -= 1
+                time.sleep(1)
+            return cola_barbero
+
+    def eliminar_cliente(self, cola_barbero):  # Recibe la cola del barbero donde esta el cliente al que se le
+        # terminó el tiempo
+        cliente_eliminado = cola_barbero.get()
+        print(f"{cliente_eliminado}Eliminado de la cola del barbero {cola_barbero}")
+
+        pass
 '''        for elemento in self.lista_barberos:
             print(elemento.queue)
         print(self.cola_clientes)'''

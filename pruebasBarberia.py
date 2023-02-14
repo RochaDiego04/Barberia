@@ -44,12 +44,15 @@ def manejar_eventos():
                 tiempo_inicio = time.time()
 
             elif evento.key == pygame.K_p:
-                print("Agregar persona")
+                Barberia.Clase_Barberia.crear_clientes(barberia_puñeta)
+
         if Barberia.Clase_Barberia.verificar_fila_vacia(barberia_puñeta):
             pass
         else:  # Si la fila no esta vacía verifica cuales barberos estan desocupados y mandarlos con ellos
-            Barberia.Clase_Barberia.verificar_barberos_desocupados(barberia_puñeta)
-
+            cola_barbero = Barberia.Clase_Barberia.verificar_barberos_desocupados(barberia_puñeta)
+            cola_barbero_en_cero = Barberia.Clase_Barberia.disminuir_contadores(barberia_puñeta, cola_barbero)  # Cola del barbero con 0 seg restantes en el cliente
+            Barberia.Clase_Barberia.eliminar_cliente(barberia_puñeta, cola_barbero_en_cero)  # Al terminar el tiempo, eliminamos al cliente de la cola del
+            # barbero
     return True
 
 
